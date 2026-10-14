@@ -1,5 +1,12 @@
 # Phân biệt MCP và Function Calling
 
+## Chạy lab trên Windows
+
+Xem [LAB_REPORT.md](LAB_REPORT.md) để đọc hướng dẫn PowerShell và kết quả
+kiểm chứng. Sau khi điền hai file `.env`, chạy `Start-Lab.ps1` tại thư mục gốc
+để khởi động Weather MCP Server và ADK Web; `Stop-Lab.ps1` dừng chúng.
+`verify_labs.py` chạy toàn bộ demo và lưu bằng chứng trong `reports/`.
+
 Đây là hai khái niệm hay bị nhầm lẫn nhưng thực ra ở **hai tầng khác nhau**, và **bổ sung cho nhau** chứ không thay thế.
 
 ## Cấu trúc repo
@@ -176,7 +183,7 @@ MCP server phục vụ qua **HTTP** cho nhiều client → cần xác thực. MC
 
 - Server: cấu hình `AuthSettings` + implement `TokenVerifier` protocol
 - Client: gửi header `Authorization: Bearer <token>` qua `create_mcp_http_client(headers=...)` của MCP SDK
-- Không có token → 401, token sai → 403, logic tool không biết gì về auth
+- Không có token hoặc token sai → 401 (đã kiểm tra với MCP SDK 2.3.0); logic tool không biết gì về auth
 
 | Tầng | Demo (stdio) | Production (HTTP) |
 |---|---|---|

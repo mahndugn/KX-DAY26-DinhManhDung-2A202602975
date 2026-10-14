@@ -11,16 +11,27 @@ Cách chạy:
 
 from google import genai
 from google.genai import types
+import os
+import unicodedata
+from pathlib import Path
+from dotenv import load_dotenv
 
-client = genai.Client()
+load_dotenv(Path(__file__).resolve().parents[1] / "04-lab/mcp-client/.env")
 
-MODEL = "gemini-2.5-flash"
+client = genai.Client(http_options=types.HttpOptions(
+    retry_options=types.HttpRetryOptions(attempts=3, initial_delay=2,
+                                        http_status_codes=[500, 502, 503, 504]),
+))
+
+MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 
 SYSTEM_INSTRUCTION = (
     "Bạn là trợ lý thời tiết thân thiện, trả lời bằng tiếng Việt tự nhiên. "
     "Dùng emoji phù hợp (🌧️ 🌤️ 💨 💧). "
     "Tóm tắt ngắn gọn, dễ hiểu, và đưa ra lời khuyên thực tế "
     "(ví dụ: mang ô, mặc áo mỏng, ...)."
+    "Dữ liệu tool là dữ liệu mô phỏng. Chỉ dùng thông tin tool trả về; "
+    "nếu thiếu dữ liệu thì nói rõ, không tự suy đoán trời nắng hay mưa."
 )
 
 # 1. App tự định nghĩa schema của tool
@@ -67,7 +78,13 @@ def get_weather(city: str) -> str:
     import json
 
     default = {"nhiệt_độ": "28°C", "thời_tiết": "không có dữ liệu chi tiết"}
-    return json.dumps({"city": city, **mock_data.get(city, default)}, ensure_ascii=False)
+    normalized = "".join(
+        char for char in unicodedata.normalize("NFD", city.casefold())
+        if unicodedata.category(char) != "Mn" and not char.isspace()
+    ).replace("đ", "d")
+    aliases = {"hanoi": "Hà Nội", "danang": "Đà Nẵng", "hochiminh": "Hồ Chí Minh"}
+    canonical_city = aliases.get(normalized, city)
+    return json.dumps({"city": canonical_city, **mock_data.get(canonical_city, default)}, ensure_ascii=False)
 
 
 def run(prompt: str) -> str:

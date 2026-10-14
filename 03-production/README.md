@@ -51,7 +51,7 @@ Client                                Server
 
 - Token hợp lệ → truy cập tool bình thường
 - Thiếu token → `401`
-- Token sai → `403`
+- Token sai → `401` (đã kiểm tra với MCP SDK 2.3.0)
 - Logic tool không biết gì về auth — SDK xử lý ở tầng transport
 
 ---

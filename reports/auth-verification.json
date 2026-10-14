@@ -1,0 +1,6 @@
+{
+  "passed": true,
+  "missing_token_status": 401,
+  "invalid_token_status": 401,
+  "valid_token_result": "Hanoi: 29°C, trời mưa"
+}

@@ -1,0 +1,33 @@
+{
+  "timestamp_utc": "2026-10-14T16:20:41.438032+00:00",
+  "passed": true,
+  "mcp_calls": [
+    {
+      "tool": "health_check",
+      "arguments": {},
+      "result": "✅ Weather MCP Server is running! Ready to provide weather data for Australian cities and worldwide."
+    },
+    {
+      "tool": "get_current_weather",
+      "arguments": {
+        "city": "Hanoi"
+      },
+      "result": "\nCurrent Weather for Hanoi, , Vietnam:\n\nTemperature: 26.5°C (79.7°F)\nFeels like: 28.3°C (82.9°F)\nCondition: Smoky haze\nHumidity: 76%\nWind: 16.2 km/h (10.1 mph) SSE\nPressure: 1015.0 mb\nUV Index: 0.0\nVisibility: 4.0 km\n\nLast updated: 2026-10-14 23:00\n"
+    },
+    {
+      "tool": "get_forecast",
+      "arguments": {
+        "city": "Tokyo",
+        "days": 3
+      },
+      "result": "Weather Forecast for Tokyo, Tokyo, Japan:\n---\n\n2026-10-15:\nHigh: 22.4°C (72.3°F)\nLow: 19.0°C (66.2°F)\nCondition: Sunny\nChance of Rain: 8%\nMax Wind: 19.4 km/h\nUV Index: 3.7\n\n---\n\n2026-10-16:\nHigh: 25.1°C (77.2°F)\nLow: 19.6°C (67.4°F)\nCondition: Overcast\nChance of Rain: 11%\nMax Wind: 9.0 km/h\nUV Index: 4.6\n\n---\n\n2026-10-17:\nHigh: 24.6°C (76.2°F)\nLow: 20.0°C (68.0°F)\nCondition: Sunny\nChance of Rain: 6%\nMax Wind: 20.2 km/h\nUV Index: 4.0\n"
+    }
+  ],
+  "agent_traces": [],
+  "model": "gemini-3.5-flash-lite",
+  "discovered_tools": [
+    "get_current_weather",
+    "get_forecast",
+    "health_check"
+  ]
+}

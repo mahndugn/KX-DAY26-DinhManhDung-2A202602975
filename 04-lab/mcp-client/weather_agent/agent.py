@@ -1,59 +1,45 @@
-"""
-Weather Agent - Connects to Remote MCP Server on Cloud Run
-Successfully connects to custom MCP HTTP endpoints!
-"""
-from google.adk import Agent
-from google.adk.tools.mcp_tool.mcp_toolset import McpToolset, StreamableHTTPConnectionParams
+﻿"""Weather agent using tools discovered from an HTTP MCP server."""
 import logging
 import os
+from pathlib import Path
 
-# Set up logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+from dotenv import load_dotenv
+from google.adk import Agent
+from google.adk.models.google_llm import Gemini
+from google.genai import types
+from google.adk.tools.mcp_tool.mcp_toolset import (
+    McpToolset,
+    StreamableHTTPConnectionParams,
+)
 
-# Mặc định: server chạy local. Deploy lên Cloud Run thì đặt MCP_SERVER_URL trong .env
-# (ví dụ: https://<service>.run.app/mcp). verify_setup.py đọc cùng biến này.
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+load_dotenv(Path(__file__).with_name(".env"))
+logging.getLogger("httpx").setLevel(logging.WARNING)
+
 MCP_SERVER_URL = os.getenv("MCP_SERVER_URL", "http://localhost:8085/mcp")
-
-logger.info(f"🌐 Initializing weather agent with remote MCP server")
-logger.info(f"📡 MCP Server: {MCP_SERVER_URL}")
-
-try:
-    # Create connection parameters for the remote MCP server
-    connection_params = StreamableHTTPConnectionParams(
+weather_tools = McpToolset(
+    connection_params=StreamableHTTPConnectionParams(
         url=MCP_SERVER_URL,
-        timeout=30.0,  # Increased timeout for Cloud Run cold starts
-    )
-    
-    # Create the MCP toolset - this will connect to the remote server
-    logger.info("🔌 Connecting to MCP server...")
-    weather_tools = McpToolset(
-        connection_params=connection_params,
-    )
-    logger.info("✅ MCP toolset created successfully")
-    
-    # Create the agent with remote MCP tools
-    root_agent = Agent(
-        name="weather_agent",
-        model="gemini-2.5-flash",
-        tools=[weather_tools],
-    )
-    logger.info("✅ Weather agent initialized with remote MCP tools:")
-    logger.info("   - get_current_weather(city)")
-    logger.info("   - get_forecast(city, days)")
-    logger.info("   - health_check()")
-    logger.info("🎉 Remote MCP connection successful!")
-    
-except Exception as e:
-    logger.error(f"❌ Failed to connect to remote MCP server: {e}")
-    logger.error(f"   Server URL: {MCP_SERVER_URL}")
-    import traceback
-    traceback.print_exc()
-    
-    # Create a fallback agent without tools
-    logger.warning("⚠️  Creating fallback agent without MCP tools")
-    root_agent = Agent(
-        name="weather_agent",
-        model="gemini-2.5-flash",
-    )
+        timeout=30.0,
+    ),
+)
 
+root_agent = Agent(
+    name="weather_agent",
+    model=Gemini(
+        model=os.getenv("GEMINI_MODEL", "gemini-2.5-flash"),
+        retry_options=types.HttpRetryOptions(attempts=3, initial_delay=2,
+                                            http_status_codes=[500, 502, 503, 504]),
+    ),
+    instruction=(
+        "Bạn là trợ lý thời tiết. Trả lời bằng tiếng Việt. "
+        "Các tool hỗ trợ thành phố trên toàn thế giới, bao gồm Tokyo. "
+        "Tên thành phố trong mô tả tool chỉ là ví dụ, không phải danh sách giới hạn. "
+        "Luôn dùng get_current_weather cho thời tiết hiện tại và get_forecast "
+        "cho dự báo; không tự bịa dữ liệu. Dự báo hỗ trợ 1 đến 3 ngày. "
+        "Dùng health_check khi người dùng yêu cầu kiểm tra server. "
+        "Nếu tool báo lỗi, giải thích lỗi thay vì đưa ra số liệu giả."
+    ),
+    generate_content_config=types.GenerateContentConfig(temperature=0.2),
+    tools=[weather_tools],
+)

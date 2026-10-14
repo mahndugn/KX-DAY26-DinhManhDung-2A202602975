@@ -1,0 +1,120 @@
+{
+  "timestamp_utc": "2026-10-14T16:14:25.234253+00:00",
+  "passed": true,
+  "mcp_calls": [
+    {
+      "tool": "health_check",
+      "arguments": {},
+      "result": "✅ Weather MCP Server is running! Ready to provide weather data for Australian cities and worldwide."
+    },
+    {
+      "tool": "get_current_weather",
+      "arguments": {
+        "city": "Hanoi"
+      },
+      "result": "\nCurrent Weather for Hanoi, , Vietnam:\n\nTemperature: 26.5°C (79.7°F)\nFeels like: 28.3°C (82.9°F)\nCondition: Smoky haze\nHumidity: 76%\nWind: 16.2 km/h (10.1 mph) SSE\nPressure: 1015.0 mb\nUV Index: 0.0\nVisibility: 4.0 km\n\nLast updated: 2026-10-14 23:00\n"
+    },
+    {
+      "tool": "get_forecast",
+      "arguments": {
+        "city": "Tokyo",
+        "days": 3
+      },
+      "result": "Weather Forecast for Tokyo, Tokyo, Japan:\n---\n\n2026-10-15:\nHigh: 22.4°C (72.3°F)\nLow: 19.0°C (66.2°F)\nCondition: Sunny\nChance of Rain: 8%\nMax Wind: 19.4 km/h\nUV Index: 3.7\n\n---\n\n2026-10-16:\nHigh: 25.1°C (77.2°F)\nLow: 19.6°C (67.4°F)\nCondition: Overcast\nChance of Rain: 11%\nMax Wind: 9.0 km/h\nUV Index: 4.6\n\n---\n\n2026-10-17:\nHigh: 24.6°C (76.2°F)\nLow: 20.0°C (68.0°F)\nCondition: Sunny\nChance of Rain: 6%\nMax Wind: 20.2 km/h\nUV Index: 4.0\n"
+    }
+  ],
+  "agent_traces": [
+    {
+      "prompt": "Hãy gọi health_check để kiểm tra server.",
+      "calls": [
+        {
+          "name": "health_check",
+          "args": {}
+        }
+      ],
+      "responses": [
+        {
+          "name": "health_check",
+          "response": {
+            "content": [
+              {
+                "type": "text",
+                "text": "✅ Weather MCP Server is running! Ready to provide weather data for Australian cities and worldwide."
+              }
+            ],
+            "structuredContent": {
+              "result": "✅ Weather MCP Server is running! Ready to provide weather data for Australian cities and worldwide."
+            },
+            "isError": false
+          }
+        }
+      ],
+      "answer": "Server hoạt động bình thường: ✅ Weather MCP Server is running! Ready to provide weather data for Australian cities and worldwide."
+    },
+    {
+      "prompt": "Dùng tool lấy thời tiết hiện tại ở Hanoi, trả lời tiếng Việt.",
+      "calls": [
+        {
+          "name": "get_current_weather",
+          "args": {
+            "city": "Hanoi"
+          }
+        }
+      ],
+      "responses": [
+        {
+          "name": "get_current_weather",
+          "response": {
+            "content": [
+              {
+                "type": "text",
+                "text": "\nCurrent Weather for Hanoi, , Vietnam:\n\nTemperature: 26.5°C (79.7°F)\nFeels like: 28.3°C (82.9°F)\nCondition: Smoky haze\nHumidity: 76%\nWind: 16.2 km/h (10.1 mph) SSE\nPressure: 1015.0 mb\nUV Index: 0.0\nVisibility: 4.0 km\n\nLast updated: 2026-10-14 23:00\n"
+              }
+            ],
+            "structuredContent": {
+              "result": "\nCurrent Weather for Hanoi, , Vietnam:\n\nTemperature: 26.5°C (79.7°F)\nFeels like: 28.3°C (82.9°F)\nCondition: Smoky haze\nHumidity: 76%\nWind: 16.2 km/h (10.1 mph) SSE\nPressure: 1015.0 mb\nUV Index: 0.0\nVisibility: 4.0 km\n\nLast updated: 2026-10-14 23:00\n"
+            },
+            "isError": false
+          }
+        }
+      ],
+      "answer": "Dưới đây là thông tin thời tiết hiện tại ở Hà Nội:\n\n* **Nhiệt độ:** 26.5°C (Cảm giác như: 28.3°C)\n* **Tình trạng:** Khói mù (Smoky haze)\n* **Độ ẩm:** 76%\n* **Gió:** 16.2 km/h hướng Nam - Đông Nam (SSE)\n* **Áp suất khí quyển:** 1015.0 mb\n* **Tầm nhìn:** 4.0 km\n* **Chỉ số UV:** 0.0\n\n*(Cập nhật lúc: 23:00 ngày 14/10/2026)*"
+    },
+    {
+      "prompt": "Dùng tool lấy dự báo thời tiết Tokyo trong 3 ngày, kèm khả năng mưa.",
+      "calls": [
+        {
+          "name": "get_forecast",
+          "args": {
+            "city": "Tokyo",
+            "days": 3
+          }
+        }
+      ],
+      "responses": [
+        {
+          "name": "get_forecast",
+          "response": {
+            "content": [
+              {
+                "type": "text",
+                "text": "Weather Forecast for Tokyo, Tokyo, Japan:\n---\n\n2026-10-15:\nHigh: 22.4°C (72.3°F)\nLow: 19.0°C (66.2°F)\nCondition: Sunny\nChance of Rain: 8%\nMax Wind: 19.4 km/h\nUV Index: 3.7\n\n---\n\n2026-10-16:\nHigh: 25.1°C (77.2°F)\nLow: 19.6°C (67.4°F)\nCondition: Overcast\nChance of Rain: 11%\nMax Wind: 9.0 km/h\nUV Index: 4.6\n\n---\n\n2026-10-17:\nHigh: 24.6°C (76.2°F)\nLow: 20.0°C (68.0°F)\nCondition: Sunny\nChance of Rain: 6%\nMax Wind: 20.2 km/h\nUV Index: 4.0\n"
+              }
+            ],
+            "structuredContent": {
+              "result": "Weather Forecast for Tokyo, Tokyo, Japan:\n---\n\n2026-10-15:\nHigh: 22.4°C (72.3°F)\nLow: 19.0°C (66.2°F)\nCondition: Sunny\nChance of Rain: 8%\nMax Wind: 19.4 km/h\nUV Index: 3.7\n\n---\n\n2026-10-16:\nHigh: 25.1°C (77.2°F)\nLow: 19.6°C (67.4°F)\nCondition: Overcast\nChance of Rain: 11%\nMax Wind: 9.0 km/h\nUV Index: 4.6\n\n---\n\n2026-10-17:\nHigh: 24.6°C (76.2°F)\nLow: 20.0°C (68.0°F)\nCondition: Sunny\nChance of Rain: 6%\nMax Wind: 20.2 km/h\nUV Index: 4.0\n"
+            },
+            "isError": false
+          }
+        }
+      ],
+      "answer": "Dự báo thời tiết tại Tokyo trong 3 ngày tới:\n\n*   **Ngày 15/10/2026:**\n    *   Nhiệt độ: Thấp nhất 19.0°C – Cao nhất 22.4°C\n    *   Tình trạng: Trời nắng\n    *   Khả năng mưa: 8%\n\n*   **Ngày 16/10/2026:**\n    *   Nhiệt độ: Thấp nhất 19.6°C – Cao nhất 25.1°C\n    *   Tình trạng: Nhiều mây\n    *   Khả năng mưa: 11%\n\n*   **Ngày 17/10/2026:**\n    *   Nhiệt độ: Thấp nhất 20.0°C – Cao nhất 24.6°C\n    *   Tình trạng: Trời nắng\n    *   Khả năng mưa: 6%"
+    }
+  ],
+  "model": "gemini-3.5-flash-lite",
+  "discovered_tools": [
+    "get_current_weather",
+    "get_forecast",
+    "health_check"
+  ]
+}

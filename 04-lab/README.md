@@ -65,6 +65,10 @@ uv run python weather.py
 
 The server will be available at `http://localhost:8085/mcp`.
 
+The server also reads `mcp-server/.env` automatically. HTTP is the default
+transport even when started in the background; use `--transport stdio` explicitly
+for a stdio client. Forecast day counts are clamped to 1–3.
+
 ### 2. ADK Agent (Client)
 
 ```bash
@@ -79,6 +83,11 @@ uv run adk web
 ```
 
 Open http://localhost:8000 in your browser, select `weather_agent`, and ask about the weather.
+
+On Windows, from the repository root, `powershell -ExecutionPolicy Bypass -File
+.\Start-Lab.ps1` starts both services in the background using their separate
+Python 3.12 environments. `Stop-Lab.ps1` stops the processes it started.
+See [the lab report](../LAB_REPORT.md) for verified results and PowerShell commands.
 
 ## Configuration
 

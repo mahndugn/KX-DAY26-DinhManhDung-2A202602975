@@ -47,7 +47,7 @@ uv run python weather.py
 ### 2. Setup Environment
 
 ```bash
-cd mcp-client
+cd ../mcp-client
 
 # Create .env file with your Google API key
 # Get free key from: https://aistudio.google.com/apikey
@@ -116,24 +116,45 @@ root_agent = Agent(
    - Ensure the MCP server is running on port 8085
    - Check `MCP_SERVER_URL` (env var / `.env`, default `http://localhost:8085/mcp`)
 
-2. **405 errors**: Port conflict with another application
-   - Check what's running on the port: `lsof -i :8085`
-   - Change port in both server and client if needed
+2. **400/405/406 on a browser GET**: the MCP endpoint expects protocol headers and messages.
+   - Use `uv run python verify_setup.py` to initialize MCP and call real tools.
+   - A plain GET response does not verify the tools or WeatherAPI key.
 
 3. **Timeout errors**: Server not started
    - Start the MCP server first, then the ADK client
 
-### Fallback Mode
+### Connection failures and model limits
 
-If MCP connection fails, the agent runs in fallback mode without tools.
-Fix the connection and restart ADK web.
+Connection failures are reported rather than creating an agent without tools.
+The agent retries temporary model errors up to three attempts. A Gemini 429 means
+the project's quota is exhausted; wait for the retry interval or check your quota.
+`verify_setup.py --agent` spaces its three prompts by 35 seconds to avoid the
+observed five-requests-per-minute free-tier limit (each tool turn needs at least
+two model requests). This check consumes API quota.
 
 ## Environment Variables
 
 Create `.env` file:
 ```bash
 GOOGLE_API_KEY=your_gemini_api_key
+GOOGLE_GENAI_USE_VERTEXAI=FALSE
+MCP_SERVER_URL=http://localhost:8085/mcp
+# Optional: GEMINI_MODEL=gemini-2.5-flash
 ```
+
+`agent.py` explicitly loads `mcp-client/.env`, with an optional
+`weather_agent/.env` as a secondary source. Existing process variables take precedence.
+
+## Verify
+
+```bash
+uv run python verify_setup.py
+uv run python verify_setup.py --agent --output ../../reports/lab04-verification.json
+```
+
+The first command tests MCP discovery, health, current Hanoi weather, and a
+three-day Tokyo forecast. The second also asserts Gemini emits the expected
+function call, receives real tool data, and produces a final answer.
 
 ## Resources
 

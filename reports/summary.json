@@ -1,0 +1,38 @@
+﻿{
+    "timestamp_utc":  "2026-10-14T16:10:47.807073+00:00",
+    "checks":  [
+                   {
+                       "name":  "lab01",
+                       "passed":  true,
+                       "exit_code":  0
+                   },
+                   {
+                       "name":  "lab02",
+                       "passed":  true,
+                       "exit_code":  0
+                   },
+                   {
+                       "name":  "registry",
+                       "passed":  true,
+                       "exit_code":  0
+                   },
+                   {
+                       "name":  "versioning",
+                       "passed":  true,
+                       "exit_code":  0
+                   },
+                   {
+                       "name":  "auth",
+                       "passed":  true,
+                       "exit_code":  0
+                   },
+                   {
+                       "name":  "lab04",
+                       "passed":  true,
+                       "evidence":  "reports/lab04-verification.json",
+                       "model":  "gemini-3.5-flash-lite"
+                   }
+               ],
+    "passed":  true,
+    "completed_utc":  "2026-10-14T16:18:07.9631745Z"
+}

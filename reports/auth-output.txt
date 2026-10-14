@@ -1,0 +1,1 @@
+PASS auth: missing/invalid token rejected; valid token calls get_weather
